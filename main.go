@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	romans "github.com/summed/goromans"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -14,15 +16,39 @@ func main() {
 		scanner := bufio.NewScanner(os.Stdin)
 		scanner.Scan()
 		input := scanner.Text()
-		a, b, operator := defineOperandsAndOperator(input)
-		fmt.Printf("%v %v %v\n", a, operator, b)
+		aString, bString, operator := defineOperandsAndOperator(input)
+		fmt.Printf("%v %v %v\n", aString, operator, bString)
+		A, B, isRoman := convertOperands(aString, bString)
+		fmt.Printf("A = %v, B = %v, isRoman %v\n", A, B, isRoman)
+
 	}
 
 }
 
-//func calculate (a, b int, operator string, isRoman bool) int {
-//
-//}
+func convertOperands(aString, bString string) (a, b int, isRoman bool) {
+	if romans.IsRomanNumerals(aString) || romans.IsRomanNumerals(bString) {
+		isRoman = romans.IsRomanNumerals(aString) && romans.IsRomanNumerals(bString)
+		if isRoman {
+			aUint, _ := romans.RtoA(aString)
+			bUint, _ := romans.RtoA(bString)
+			a = int(aUint)
+			b = int(bUint)
+			return a, b, isRoman
+		} else {
+			panic("Ошибка! Опреанды должны быть одной системы!")
+		}
+	}
+
+	a, erra := strconv.Atoi(aString)
+	if erra != nil {
+		panic("Ошибка! Операнд должен быть числом!")
+	}
+	b, errb := strconv.Atoi(bString)
+	if errb != nil {
+		panic("Ошибка! Операнд должен быть числом!")
+	}
+	return
+}
 
 func defineOperandsAndOperator(input string) (operand1, operand2, operator string) {
 	arr := strings.Split(strings.ReplaceAll(input, " ", ""), "")
