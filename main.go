@@ -15,6 +15,8 @@ func main() {
 		a, b, operator := defineOperandsAndOperator(input)
 		fmt.Printf("%v %v %v", a, operator, b)
 	}
+
+	fmt.Println("Test gitlab")
 }
 
 func defineOperandsAndOperator(input string) (operand1, operand2, operator string) {
