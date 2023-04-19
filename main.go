@@ -67,6 +67,12 @@ func calculate(a, b int, operator string) int {
 func convertOperands(aString, bString string) (a, b int, isRoman bool) {
 	CallClear()
 	if romans.IsRomanNumerals(aString) || romans.IsRomanNumerals(bString) {
+		checkMinus := strings.Split(aString, "")
+		for _, minus := range checkMinus {
+			if minus == "-" {
+				panic("Ошибка! В римской системе нет отрицательных чисел! Введите значение от I до X")
+			}
+		}
 		isRoman = romans.IsRomanNumerals(aString) && romans.IsRomanNumerals(bString)
 		if isRoman {
 			aUint, _ := romans.RtoA(aString)
@@ -81,11 +87,11 @@ func convertOperands(aString, bString string) (a, b int, isRoman bool) {
 
 	a, erra := strconv.Atoi(aString)
 	if erra != nil {
-		panic("Ошибка! Операнд должен быть числом!")
+		panic("Ошибка! Операнды должны быть арабскими либо римскими числами!")
 	}
 	b, errb := strconv.Atoi(bString)
 	if errb != nil {
-		panic("Ошибка! Операнд должен быть числом!")
+		panic("Ошибка! Операнды должны быть арабскими либо римскими числами!")
 	}
 	return
 }
@@ -93,7 +99,8 @@ func convertOperands(aString, bString string) (a, b int, isRoman bool) {
 func defineOperandsAndOperator(input string) (operand1, operand2, operator string) {
 	arr := strings.Split(strings.ReplaceAll(input, " ", ""), "")
 	isOperator := false
-	for i := 0; i < len(arr); i++ {
+	i := 1
+	for ; i < len(arr); i++ {
 		for in := 0; in < len(availbleOperators); in++ {
 			if arr[i] == availbleOperators[in] {
 				isOperator = true
