@@ -21,6 +21,7 @@ func main() {
 		aString, bString, operator := defineOperandsAndOperator(input)
 		A, B, isRoman := convertOperands(aString, bString)
 		res := calculate(A, B, operator)
+		CallClear() //Очистка экрана
 		printResult(A, B, res, operator, isRoman)
 
 	}
@@ -30,12 +31,9 @@ func main() {
 func printResult(a, b, res int, operator string, isRoman bool) {
 	if isRoman {
 		if res > 0 {
-			aUint := uint(a)
-			bUint := uint(b)
-			resUint := uint(res)
-			aR := romans.AtoR(aUint)
-			bR := romans.AtoR(bUint)
-			resR := romans.AtoR(resUint)
+			aR := romans.AtoR(uint(a))
+			bR := romans.AtoR(uint(b))
+			resR := romans.AtoR(uint(res))
 			fmt.Printf("Результат выражения %v %v %v = %v\n", aR, operator, bR, resR)
 		} else {
 			panic("Ошибка! В римской системе счета нет отрицательных значений, а так же нуля!")
@@ -65,7 +63,6 @@ func calculate(a, b int, operator string) int {
 }
 
 func convertOperands(aString, bString string) (a, b int, isRoman bool) {
-	CallClear()
 	if romans.IsRomanNumerals(aString) || romans.IsRomanNumerals(bString) {
 		checkMinus := strings.Split(aString, "")
 		for _, minus := range checkMinus {
@@ -79,9 +76,9 @@ func convertOperands(aString, bString string) (a, b int, isRoman bool) {
 			bUint, _ := romans.RtoA(bString)
 			a = int(aUint)
 			b = int(bUint)
-			return a, b, isRoman
+			return
 		} else {
-			panic("Ошибка! Опреанды должны быть одной системы!")
+			panic("Ошибка! Операнды должны быть одной системы!")
 		}
 	}
 
@@ -99,8 +96,7 @@ func convertOperands(aString, bString string) (a, b int, isRoman bool) {
 func defineOperandsAndOperator(input string) (operand1, operand2, operator string) {
 	arr := strings.Split(strings.ReplaceAll(input, " ", ""), "")
 	isOperator := false
-	i := 1
-	for ; i < len(arr); i++ {
+	for i := 1; i < len(arr); i++ {
 		for in := 0; in < len(availbleOperators); in++ {
 			if arr[i] == availbleOperators[in] {
 				isOperator = true
