@@ -12,16 +12,17 @@ var availbleOperators = []string{"+", "-", "*", "/"}
 var sets = []struct {
 	arabic int
 	rome   string
+	max    int
 }{
-	{100, "C"},
-	{90, "XC"},
-	{50, "L"},
-	{40, "XL"},
-	{10, "X"},
-	{9, "IX"},
-	{5, "V"},
-	{4, "IV"},
-	{1, "I"},
+	{100, "C", 1},
+	{90, "XC", 1},
+	{50, "L", 1},
+	{40, "XL", 1},
+	{10, "X", 2},
+	{9, "IX", 1},
+	{5, "V", 1},
+	{4, "IV", 1},
+	{1, "I", 3},
 }
 
 func main() {
@@ -102,7 +103,17 @@ func convRtoA(romeNum string) int {
 	for _, romeNum := range arrString { // Цикл созздает массив c арабскими числами
 		for _, set := range sets {
 			if romeNum == set.rome {
-				arrInt = append(arrInt, set.arabic)
+				var count = 0
+				for _, val := range arrString {
+					if set.rome == val {
+						count++
+					}
+				}
+				if count <= set.max {
+					arrInt = append(arrInt, set.arabic)
+				} else {
+					panic("Ошибка! Введите корректные римские цифры")
+				}
 			}
 
 		}
@@ -152,13 +163,17 @@ func calc(input string) (result string) {
 			res = aInt / bInt
 		}
 
-		if isRoman(aString) && isRoman(bString) {
-			if res == 0 {
-				result = "(В римской системе исчисления нет нуля)"
-				return result
-			} else if res < 0 {
-				result = "(В римской системе исчисления нет отрицательных значений)"
-				return result
+		if isRoman(aString) || isRoman(bString) {
+			if isRoman(aString) && isRoman(bString) {
+				if res == 0 {
+					result = "(В римской системе исчисления нет нуля)"
+					return result
+				} else if res < 0 {
+					result = "(В римской системе исчисления нет отрицательных значений)"
+					return result
+				}
+			} else {
+				panic("Ошибка! Введите либо римские либо арабские числа")
 			}
 			result = convAtoR(res)
 			return result
