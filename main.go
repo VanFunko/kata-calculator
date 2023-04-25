@@ -25,6 +25,7 @@ var sets = []struct {
 	{1, "I", 3},
 }
 
+// test git ubuntu
 func main() {
 	for {
 		scanner := bufio.NewScanner(os.Stdin)
